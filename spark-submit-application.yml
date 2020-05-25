@@ -1,0 +1,42 @@
+---
+- hosts: all
+
+  tasks:
+    - block:
+        - name: Create the apps directory, if it doesn't exist
+          file:
+            path: "/opt/spark/apps"
+            state: directory
+
+        - name: Set the Spark application directory
+          set_fact:
+            spark_app_dir: "/opt/spark/apps/application"
+
+        - name: Set the Spark application class
+          set_fact:
+            spark_app_class: "HelloWorld"
+
+        - name: Remove application directory
+          file:
+            path: "{{ spark_app_dir }}"
+            state: absent
+
+        - name: Copy application directory
+          copy:
+            src: "{{ item }}"
+            dest: "{{ spark_app_dir }}/"
+            follow: yes
+          with_fileglob:
+            - application/*
+
+    - name: Find out the JAR
+      shell: ls -d {{ spark_app_dir }}/*.jar
+      register: find_jar_result
+
+    - name: Submit Spark application
+      shell: ./bin/spark-submit --deploy-mode cluster --master spark://{{ hostvars['master']['ansible_host'] }}:7077 \
+              --class {{ spark_app_class }} \
+              {{ find_jar_result.stdout }} \
+      args:
+        chdir: "/opt/spark"
+      when: inventory_hostname == 'livy'
