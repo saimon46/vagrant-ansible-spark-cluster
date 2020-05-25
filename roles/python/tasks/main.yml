@@ -1,0 +1,11 @@
+---
+- name: Install python3 on Centos7 instances
+  become: true
+  yum:
+    name: python3
+    state: present
+    use_backend: yum
+    update_cache: true
+  tags:
+    - python
+    

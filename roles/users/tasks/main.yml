@@ -1,0 +1,14 @@
+---
+
+- name: Create service account for Spark
+  user:
+    name: "{{ spark.user }}"
+    system: yes
+    shell: "{{ spark.user_shell }}"
+    state: present
+    groups: "{{ spark.user_groups | join(',') }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+    append: true
+  register: spark_user

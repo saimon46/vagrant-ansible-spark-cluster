@@ -1,0 +1,29 @@
+---
+
+- name: "Set correct ssh permissions"
+  file:
+    dest: "/home/{{ spark.user }}/.ssh"
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+    recurse: yes
+  when: spark_user.changed
+
+- name: Cat ssh pub keys in all hosts
+  shell: "cat /home/{{ spark.user }}/.ssh/id_rsa.pub"
+  register: ssh_keys
+  when: spark_user.changed
+
+- name: Allow passwordless SSH between all hosts from master
+  authorized_key:
+    user: "{{ spark.user }}"
+    state: present
+    key: "{{ hostvars['master']['ssh_keys']['stdout'] }}"
+  when: spark_user.changed
+
+- name: Allow passwordless SSH between all hosts from slaves
+  authorized_key:
+    user: "{{ spark.user }}"
+    state: present
+    key: "{{ hostvars[item]['ssh_keys']['stdout'] }}"
+  with_items: "{{ groups['slaves'] }}"
+  when: spark_user.changed
