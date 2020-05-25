@@ -34,7 +34,7 @@
       register: find_jar_result
 
     - name: Submit Spark application
-      shell: ./bin/spark-submit --deploy-mode cluster --master spark://{{ hostvars['master']['ansible_host'] }}:7077 \
+      shell: ./bin/spark-submit --deploy-mode client --master spark://{{ hostvars['master']['ansible_host'] }}:7077 \
               --class {{ spark_app_class }} \
               {{ find_jar_result.stdout }} \
       args:

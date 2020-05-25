@@ -3,7 +3,7 @@
 - name: Open spark slave port
   firewalld:
     zone: spark
-    port: 65000/tcp
+    port: 1024-65535/tcp
     permanent: true
     state: enabled
   register: spark_slaves_firewall

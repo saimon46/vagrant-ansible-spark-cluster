@@ -7,8 +7,16 @@
     state: enabled
   register: livy_firewall
 
+- name: Open livy driver port
+  firewalld:
+    zone: spark
+    port: 1024-65535/tcp
+    permanent: true
+    state: enabled
+  register: livy_driver_firewall
+
 - name: Restart the firewalld service to load in the firewall changes
   service: 
     name: firewalld
     state: restarted
-  when: livy_firewall.changed
+  when: livy_firewall.changed or livy_driver_firewall.changed

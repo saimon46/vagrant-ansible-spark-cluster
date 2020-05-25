@@ -8,7 +8,6 @@ export SPARK_LOG_DIR=${SPARK_LOG_DIR:-{{ spark.log_dir }}}
 SPARK_LOCAL_IP={{ hostvars[inventory_hostname]['ansible_host'] }}
 SPARK_MASTER_HOST={{ hostvars['master']['ansible_host'] }}
 SPARK_MASTER_PORT={{ spark.master_port }}
-SPARK_WORKER_PORT={{ spark.worker_work_port }}
 SPARK_WORKER_WEBUI_PORT={{ spark.worker_ui_port }}
 SPARK_WORKER_INSTANCES={{ spark.worker_instances }}
 SPARK_WORKER_DIR={{ spark.working_dir }}
