@@ -1,0 +1,46 @@
+---
+
+- name: Setup firewalld on slaves
+  hosts: slaves
+  become: yes
+  roles:
+    - firewalld
+    - firewalld_slaves
+
+- name: Setup firewalld on master
+  hosts: master
+  become: yes
+  roles:
+    - firewalld
+    - firewalld_master
+
+- name: Setup firewalld on livy server
+  hosts: livy
+  become: yes
+  roles:
+    - firewalld
+    - firewalld_livy
+
+- name: Setup & Start Spark cluster
+  hosts: cluster, !livy
+  gather_facts: no
+  become: yes
+  vars_files:
+    - ./vars/config.yml
+  roles:
+    - users
+    - passwordless
+    #- python
+    - java
+    - spark
+
+- name: Setup & Start Livy
+  hosts: livy
+  become: yes
+  vars_files:
+    - ./vars/config.yml
+  roles:
+    - users
+    - java
+    - spark
+    - livy
