@@ -1,0 +1,14 @@
+---
+
+- name: Stop cluster (master - slaves)
+  listen: restart_spark_cluster
+  shell: "{{ spark_home }}/sbin/stop-all.sh"
+  become_user: "{{ spark.user }}"
+  notify: start_cluster
+  when: inventory_hostname == 'master'
+
+- name: Start cluster (master - slaves)
+  listen: start_cluster
+  shell: "{{ spark_home }}/sbin/start-all.sh"
+  become_user: "{{ spark.user }}"
+  when: inventory_hostname == 'master'

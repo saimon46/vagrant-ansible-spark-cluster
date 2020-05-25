@@ -1,0 +1,13 @@
+---
+  
+- include: init.yml
+
+- name: Check if spark exists
+  stat: 
+    path: "{{ spark_home }}"
+  register: spark_status
+
+- include: install.yml
+  when: spark_status.stat.exists == False
+
+- include: config.yml

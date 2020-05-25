@@ -1,0 +1,16 @@
+---
+
+- name: set spark installation path fact
+  set_fact: spark_installation_dir=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}
+
+- name: set spark home path fact
+  set_fact: spark_home={{ install_dir }}/{{ spark_installation_dir }}
+
+- name: set spark archive fact
+  set_fact: spark_archive=spark-{{ spark.version }}-bin-hadoop{{ spark.hadoop_version }}.tgz
+
+- name: set spark download location fact
+  set_fact: spark_download={{ spark.download_location }}/spark-{{ spark.version }}/{{ spark_archive }}
+
+- name: define number of spark workers
+  set_fact: number_of_workers="{{ groups['slaves'] | length | int }}"

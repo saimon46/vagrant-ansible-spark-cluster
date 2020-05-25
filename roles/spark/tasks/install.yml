@@ -1,0 +1,33 @@
+---
+
+- name: create install directory
+  file:
+    path: "{{ spark_home }}"
+    state: directory
+
+- name: create spark download directory
+  file:
+    path: "{{ install_temp_dir }}"
+    state: directory
+
+- name: download spark
+  get_url: url="{{ spark_download }}" dest="{{ install_temp_dir }}/{{ spark_archive }}"
+
+- name: unarchive to the install directory
+  shell: "tar -xvf {{ install_temp_dir }}/{{ spark_archive }} --strip 1 --directory {{ spark_home }}"
+
+- name: Create a symbolic link
+  file:
+    src: "{{ install_dir }}/{{ spark_installation_dir }}"
+    dest: "{{ install_dir }}/spark"
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+    state: link
+
+- name: Set permissions folder spark
+  file:
+    dest: "{{ install_dir }}/spark"
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+    state: directory
+    recurse: yes

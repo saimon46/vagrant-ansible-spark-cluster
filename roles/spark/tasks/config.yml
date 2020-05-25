@@ -1,0 +1,61 @@
+---
+
+- name: Create spark working directory
+  file:
+    path: "{{ spark.working_dir }}"
+    state: directory
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+  become: true
+
+- name: Create spark log directory
+  file:
+    path: "{{ spark.log_dir }}"
+    state: directory
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+  become: true
+
+- name: Create spark events directory
+  file:
+    path: "{{ spark.events_dir }}"
+    state: directory
+    owner: "{{ spark.user }}"
+    group: "{{ spark.user }}"
+  become: true
+
+- name: update spark configuration 'log4j.properties'
+  template:
+    src:  "log4j.properties.j2"
+    dest: "{{ spark_home }}/conf/log4j.properties"
+  tags: spark_conf
+  notify: restart_spark_cluster
+
+- name: update spark configuration 'spark-env.sh'
+  template:
+    src: "spark-env.sh.j2"
+    dest: "{{ spark_home }}/conf/spark-env.sh"
+  tags: spark_conf
+  notify: restart_spark_cluster
+
+- name: update spark configuration 'spark-defaults.conf'
+  template:
+    src: "spark-defaults-conf.j2"
+    dest: "{{ spark_home }}/conf/spark-defaults.conf"
+  tags: spark_conf
+  notify: restart_spark_cluster
+
+- name: update spark configuration 'slaves'
+  template:
+    src: "slaves.j2"
+    dest: "{{ spark_home }}/conf/slaves"
+  tags: spark_conf
+  notify: restart_spark_cluster
+
+# Environment setup.
+- name: add spark profile to startup
+  template:
+    src: spark-profile.sh.j2
+    dest: /etc/profile.d/spark-profile.sh
+    mode: 0644
+  notify: restart_spark_cluster
