@@ -1,0 +1,22 @@
+---
+
+- name: Open spark slave port
+  firewalld:
+    zone: spark
+    port: 65000/tcp
+    permanent: true
+    state: enabled
+  register: spark_slaves_firewall
+
+- name: Open spark slave ui port
+  firewalld:
+    port: 8085/tcp
+    permanent: true
+    state: enabled
+  register: spark_slaves_firewall_ui
+
+- name: Restart the firewalld service to load in the firewall changes
+  service: 
+    name: firewalld
+    state: restarted
+  when: spark_slaves_firewall.changed or spark_slaves_firewall_ui.changed

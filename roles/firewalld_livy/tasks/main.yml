@@ -1,0 +1,14 @@
+---
+
+- name: Open livy ui port
+  firewalld:
+    port: 8998/tcp
+    permanent: true
+    state: enabled
+  register: livy_firewall
+
+- name: Restart the firewalld service to load in the firewall changes
+  service: 
+    name: firewalld
+    state: restarted
+  when: livy_firewall.changed

@@ -1,0 +1,23 @@
+---
+
+- name: Enable firewalld
+  service: 
+    name: firewalld
+    state: started
+    enabled: yes
+    
+- name: Create firewall zone spark
+  firewalld:
+    zone: spark
+    state: present
+    permanent: yes
+  register: spark_firewall_zone
+
+- name: Add all nodes to spark zone
+  firewalld:
+    zone: spark
+    source: "{{ hostvars[item]['ansible_host'] }}/32"
+    permanent: yes
+    state: enabled
+  with_items: "{{ groups['cluster'] }}"
+  when: spark_firewall_zone.changed

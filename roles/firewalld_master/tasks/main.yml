@@ -1,0 +1,22 @@
+---
+
+- name: Open spark master port
+  firewalld:
+    zone: spark
+    port: 7077/tcp
+    permanent: true
+    state: enabled
+  register: spark_master_firewall
+
+- name: Open spark master ui port
+  firewalld:
+    port: 8080/tcp
+    permanent: true
+    state: enabled
+  register: spark_master_firewall_ui
+
+- name: Restart the firewalld service to load in the firewall changes
+  service: 
+    name: firewalld
+    state: restarted
+  when: spark_master_firewall.changed or spark_master_firewall_ui.changed
