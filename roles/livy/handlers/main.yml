@@ -1,0 +1,8 @@
+---
+
+- name: Start livy
+  listen: restart_livy
+  shell: "{{ livy_home }}/bin/livy-server start"
+  environment:
+    SPARK_HOME: "{{ spark_home }}"
+  become_user: "{{ livy.user }}"

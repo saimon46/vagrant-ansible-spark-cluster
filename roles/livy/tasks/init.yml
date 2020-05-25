@@ -1,0 +1,10 @@
+---
+    
+- name: set livy home path fact
+  set_fact: livy_home={{ install_dir }}/apache-livy-{{ livy.version }}-incubating-bin
+
+- name: set livy archive fact
+  set_fact: livy_archive=apache-livy-{{ livy.version }}-incubating-bin.zip
+
+- name: set livy download location fact
+  set_fact: livy_download={{ livy.download_location }}/{{ livy.version }}-incubating/{{ livy_archive }}

@@ -1,0 +1,13 @@
+---
+
+- include: init.yml
+
+- name: Check if livy exists
+  stat: 
+    path: "{{ livy_home }}"
+  register: livy_status
+
+- include: install.yml
+  when: livy_status.stat.exists == False
+
+- include: config.yml

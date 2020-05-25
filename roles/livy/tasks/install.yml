@@ -1,0 +1,34 @@
+---
+
+- name: create install directory
+  file:
+    path: "{{ livy_home }}"
+    state: directory
+
+- name: Install unzip packages
+  become: yes
+  yum:
+    name: "unzip"
+    state: present
+
+- name: Download and unarchive livy
+  unarchive:
+    src: "{{ livy_download }}"
+    dest: "{{ install_dir }}"
+    remote_src: yes
+
+- name: Create a symbolic link
+  file:
+    src: "{{ livy_home }}"
+    dest: "{{ install_dir }}/livy"
+    owner: "{{ livy.user }}"
+    group: "{{ livy.user }}"
+    state: link
+
+- name: Set permissions folder livy
+  file:
+    dest: "{{ install_dir }}/livy"
+    owner: "{{ livy.user }}"
+    group: "{{ livy.user }}"
+    state: directory
+    recurse: yes
