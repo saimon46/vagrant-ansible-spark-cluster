@@ -97,7 +97,7 @@ In the `config.yml` file I spedified different important ports that I later on o
 | Type | Port |
 |---|---|
 | Master port | 7077 |
-| Worker port | 65000 |
+| Worker port | 1024-65535 |
 | Master UI port | 8080 |
 | Worker UI port | 8085 |
 
