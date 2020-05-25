@@ -34,7 +34,7 @@ $ ansible-playbook -i inventory.yml spark-submit-application.yml
 ```
 The playbook uses the `spark-submit` command with the class definition and the jar file passed from the host machine.
 
-### Vagrant
+## Vagrant
 Using a Vagrant environment I started to setup the `Vagrantfile` in order to create different machines for every single component of the cluster, with different memory and CPU setup.
 I used a **Centos 7 base** Vagrant box to work with.
 The Vagrant setup creates instances under the same IP subnet `192.168.33.0/24`. They are splitted in this way:
@@ -43,6 +43,7 @@ The Vagrant setup creates instances under the same IP subnet `192.168.33.0/24`. 
 | Master | 1 | 1536 | 1 |
 | Slave | 1 | 1024 | 2 |
 | Livy | 1 | 768 | 1 |
+
 Of course, is possible to change the number of Slaves and CPU and Memory of every machine.
 The variable `$num_instances` takes in consideration only che cluster elements and not the Livy proxy instance.
 In the Vagrant setup I also called the Ansible provisioner in order to setup all the machines created with the playbook `spark.yml` and the inventory `inventory.yml` that I created accordingly.
@@ -51,7 +52,7 @@ To startup the process I use the command:
 $ vagrant up
 ```
 
-### Ansible
+## Ansible
 First of all, Ansible is a tool that I never used but, as I told you, it's not a problem to learn new things that is the key of every job.
 I started to look the website and the documentation to familiarize with it, thing that I did many times to resolve many problems that I found during the definition of the Spark Cluster setup.
 Since I setup the provisioner in the Vagrant file, when Vagrant creates the machines it start automatically the provisioning made with Ansible.
