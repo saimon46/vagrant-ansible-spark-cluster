@@ -103,13 +103,13 @@ In the `config.yml` file I spedified different important ports that I later on o
 
 ### Role: `livy`
 As for the spark application I did the same to organize all the different task to be done on the Livy machine. In this case the logs are saved in `/var/log/livy`.\
-Unfortunately, for some reason I have some problem starting-up the Livy server from the playbook in Ansible. I have some errors maybe because some environment variables not correctly setted, but it's not a problem of users because Ansible uses the correct `spark` user. Very strange because I didn't manage to reproduce the same error manually in the machine since there the server starts and works fine.\
+Unfortunately, for some reason I have some problem starting-up the Livy server from the playbook in Ansible. I have some errors maybe because some environment variables not correctly setted. It's not a problem of users because Ansible uses the correct `spark` user and all the folders used by Livy are correctly owned by the user `spark`. Very strange because I didn't manage to reproduce the same error manually in the machine since, the server starts and works fine.\
 To do so I used the command entering in the machine with `vagrant`:
 ```console
 $ vagrant ssh livy
 vagrant@livy$ sudo runuser -l spark -c "/opt/livy/bin/livy-server start"
 ```
-Here it's necessary to use the spark user again.\
+Here it's necessary to use the `spark` user again.\
 To finish the work on this component I have to finish to setup the connection with the Spark cluster and fix the problem at the startup. After that it's fine to test it with the proper job.
 
 ### Role: `python`
